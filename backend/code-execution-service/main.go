@@ -47,6 +47,6 @@ func runHandler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	http.HandleFunc("/execute", runHandler)
-	fmt.Print("code-execution-service started at port 8080\n")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	fmt.Print("code-execution-service running on port 8081\n")
+	log.Fatal(http.ListenAndServe(":8081", nil))
 }

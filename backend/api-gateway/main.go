@@ -4,6 +4,7 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 )
@@ -47,5 +48,6 @@ func executeCode(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	http.HandleFunc("/execute", executeCode)
-	log.Fatal(http.ListenAndServe(":8081", nil))
+	fmt.Println("API Gateway running on port 8080\n")
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
