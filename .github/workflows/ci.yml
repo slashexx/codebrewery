@@ -15,14 +15,15 @@ jobs:
         steps:
             - name: Checkout repository
               uses: actions/checkout@v3
-
-            - name: Going into frontend
-              run: cd frontend
-              
+  
             - name: Set up Node
               uses: actions/setup-node@v3
               with:
                 node-version: '20.15.1'
+            
+            - name: Going into frontend
+              run: cd frontend
+              
 
             - name : Install dependencies
               run: npm install
