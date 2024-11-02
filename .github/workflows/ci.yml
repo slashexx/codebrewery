@@ -20,13 +20,9 @@ jobs:
               uses: actions/setup-node@v3
               with:
                 node-version: '20.15.1'
-            
-            - name: Going into frontend
-              run: cd frontend
-              
 
-            - name : Install dependencies
-              run: npm install
-                
-            - name: Run tests
-              run: npm test
+            - name : Install dependencies and run
+              run: |
+               cd frontend/
+               npm install
+               npm test
