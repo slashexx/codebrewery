@@ -1,15 +1,12 @@
-version: '3.8'
 services:
-  code-execution-service:
-    build:
-      context: ./code-execution-service
-    ports:
-      - "8080:8080"
-
   api-gateway:
     build:
       context: ./api-gateway
     ports:
+      - "8080:8080"
+
+  code-execution-service:
+    build:
+      context: ./code-execution-service
+    ports:
       - "8081:8081"
-    depends_on:
-      - code-execution-service

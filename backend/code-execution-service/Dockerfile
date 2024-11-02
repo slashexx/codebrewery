@@ -1,8 +1,21 @@
-FROM golang:1.20-alpine
+# Stage 1: Build
+FROM golang:1.18-alpine AS build
 
 WORKDIR /app
-COPY . .
 
-RUN go build -o code-execution-service .
 
-CMD ["./code-execution-service"]
+COPY go.mod main.go ./
+RUN go mod download
+
+
+RUN go build -o codeexec ./main.go  
+
+
+FROM alpine:latest
+
+WORKDIR /app
+
+
+COPY --from=build /app/codeexec .
+
+CMD ["./codeexec"]
