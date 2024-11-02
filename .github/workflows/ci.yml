@@ -21,18 +21,19 @@ jobs:
         with:
           node-version: '20.15.1'
 
-      - name: Clear npm cache
-        run: npm cache clean --force
+      # - name: Clear npm cache
+      #   run: npm cache clean --force
 
-      - name: Install dependencies
+      - name: Install legcy dependencies
         run: |
             cd frontend/
             npm install --legacy-peer-deps
+        
+      - name: Install all other deps
+        run: |
+            cd frontend/
+            npm install
       
-      - name: Install npm
-        run: npm install
-
-
       - name: Run tests
         run: |
           cd frontend/
