@@ -2,7 +2,7 @@ import React from 'react';
 import { Code2, Sparkles, Terminal, Cpu, Beer, Wine } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-export function IntroPage() {
+export default function IntroPage() {
     const navigate = useNavigate();
 
   return (
