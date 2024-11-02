@@ -31,9 +31,30 @@ function App() {
     setCode(INITIAL_CODE[language]);
   };
 
-  const handleRunCode = () => {
-    setOutput(`Running ${LANGUAGE_CONFIGS[selectedLanguage].label} code...\n${code}`);
-  };
+  const handleRunCode = async () => {
+    setOutput(`Running ${LANGUAGE_CONFIGS[selectedLanguage].label} code...\n`);
+
+    try {
+      const response = await fetch('http://localhost:8080/execute', { 
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ code }),
+      });
+
+      if (!response.ok) {
+          throw new Error('Network response was not ok');
+      }
+
+      const result = await response.json();
+      console.log('Execution Result:', result);
+      // Display the result in your UI
+      setOutput(`${result.output}\n`);
+  } catch (error) {
+      console.error('Error executing code:', error);
+  }
+};
 
   const handleFormatCode = () => {
     if (editorInstance) {

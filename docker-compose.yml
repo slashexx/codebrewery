@@ -1,0 +1,18 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "5173:5173"
+
+  api-gateway:
+    build:
+      context: ./backend/api-gateway
+    ports:
+      - "8080:8080"
+
+  code-execution-service:
+    build:
+      context: ./backend/code-execution-service
+    ports:
+      - "8081:8081"

@@ -1,21 +1,21 @@
-# Stage 1: Build
-FROM golang:1.18-alpine AS build
+FROM golang:1.23-alpine
+
+# Install bash (or any other tools you need)
+RUN apk add --no-cache bash
 
 WORKDIR /app
-
 
 COPY go.mod main.go ./
 RUN go mod download
 
 
-RUN go build -o codeexec ./main.go  
+COPY . .
 
 
-FROM alpine:latest
-
-WORKDIR /app
+RUN go build -o code-execution-service .
 
 
-COPY --from=build /app/codeexec .
+EXPOSE 8081 
 
-CMD ["./codeexec"]
+
+CMD ["./code-execution-service"]
