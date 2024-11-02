@@ -1,6 +1,6 @@
 # CodeBrewery
 
-![Logo](path/to/logo.png)
+![Logo](CodeBrewery.png)
 
 CodeBrewery is an innovative web application that enables users to write, run, and experiment with code in multiple programming languages. Built with React for the frontend and Go for the backend, CodeBrewery provides an interactive platform for developers to learn and improve their coding skills through hands-on practice.
 
