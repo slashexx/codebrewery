@@ -24,19 +24,14 @@ jobs:
       - name: Clear npm cache
         run: npm cache clean --force
 
-      - name: Install npm
-        run: npm install -g npm@9.7.2 # Adjust based on your local version
-
       - name: Install dependencies
         run: |
-          cd frontend/
-          npm install --legacy-peer-deps
-
-      - name: List directory contents
-        run: ls -R frontend/
+            cd frontend/
+            npm install --legacy-peer-deps
       
-      - name: Print npm config
-        run: npm config ls
+      - name: Install npm
+        run: npm install
+
 
       - name: Run tests
         run: |
