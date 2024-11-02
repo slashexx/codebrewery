@@ -1,4 +1,3 @@
-```markdown
 # CodeBrewery
 
 ![Logo](path/to/logo.png)
