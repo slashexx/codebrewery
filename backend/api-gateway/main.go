@@ -1,6 +1,4 @@
-// main.go
-package main
-
+// First ever comment from KDE let's go ?
 import (
 	"bytes"
 	"encoding/json"
