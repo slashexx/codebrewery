@@ -1,18 +1,19 @@
-FROM ubuntu:20.04
+FROM golang:1.23-alpine
 
-# Update package lists and install necessary tools
-RUN apt-get update && apt-get install -y \
-    golang-go \
+# Set non-interactive mode for apt-get
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install additional required packages
+RUN apk add --no-cache \
     python3 \
-    python3-pip \
     gcc \
     g++ \
-    default-jdk \
-    && rm -rf /var/lib/apt/lists/*
+    openjdk11 \
+    bash
 
 WORKDIR /app
 
-# Copy Go mod and main.go to download dependencies
+# Copy go.mod and main.go to download dependencies
 COPY go.mod main.go ./
 RUN go mod download
 

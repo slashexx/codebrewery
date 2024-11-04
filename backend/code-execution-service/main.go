@@ -41,34 +41,43 @@ func executeCode(language string, code string) (string, error) {
 	}
 	tmpFile.Close()
 
-	// Determine the command to execute based on the language
+	
 	switch language {
 	case "go":
 		cmd = exec.Command("go", "run", tmpFile.Name())
 	case "python":
 		cmd = exec.Command("python3", tmpFile.Name())
 	case "c":
-		execCmd := exec.Command("gcc", tmpFile.Name(), "-o", tmpFile.Name()[:len(tmpFile.Name())-2]) // Removes .c extension
+		execCmd := exec.Command("gcc", tmpFile.Name(), "-o", tmpFile.Name()[:len(tmpFile.Name())-2]) 
 		if err := execCmd.Run(); err != nil {
-			cmdOutput, _ := execCmd.CombinedOutput() // Capture compilation error output
+			cmdOutput, _ := execCmd.CombinedOutput() 
 			return string(cmdOutput), err
 		}
-		cmd = exec.Command(tmpFile.Name()[:len(tmpFile.Name())-2]) // Execute the compiled binary
+		cmd = exec.Command(tmpFile.Name()[:len(tmpFile.Name())-2]) 
 	case "cpp":
-		execCmd := exec.Command("g++", tmpFile.Name(), "-o", tmpFile.Name()[:len(tmpFile.Name())-4]) // Removes .cpp extension
+		execCmd := exec.Command("g++", tmpFile.Name(), "-o", tmpFile.Name()[:len(tmpFile.Name())-4]) 
 		if err := execCmd.Run(); err != nil {
-			cmdOutput, _ := execCmd.CombinedOutput() // Capture compilation error output
+			cmdOutput, _ := execCmd.CombinedOutput() 
 			return string(cmdOutput), err
 		}
 		cmd = exec.Command(tmpFile.Name()[:len(tmpFile.Name())-4]) // Execute the compiled binary
 	case "java":
 		execCmd := exec.Command("javac", tmpFile.Name())
 		if err := execCmd.Run(); err != nil {
-			cmdOutput, _ := execCmd.CombinedOutput() // Capture compilation error output
+			
+			cmdOutput, _ := execCmd.CombinedOutput()
 			return string(cmdOutput), err
 		}
-		className := tmpFile.Name()[:len(tmpFile.Name())-5] // Removes .java extension
+		className := tmpFile.Name()[:len(tmpFile.Name())-5] 
 		cmd = exec.Command("java", className)
+		
+		
+		cmdOutput, err := cmd.CombinedOutput()
+		if err != nil {
+			return string(cmdOutput), err
+		}
+		return string(cmdOutput), nil
+	
 	default:
 		return "", fmt.Errorf("unsupported language: %s", language)
 	}

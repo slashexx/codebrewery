@@ -1,4 +1,6 @@
 // First ever comment from KDE let's go ?
+package main 
+
 import (
 	"bytes"
 	"encoding/json"
