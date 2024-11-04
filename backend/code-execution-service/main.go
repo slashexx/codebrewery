@@ -100,15 +100,16 @@ func executeCode(language string, code string) (string, error) {
 	return string(cmdOutput), err
 }
 
-func enableCors(w http.ResponseWriter) {
-	w.Header().Set("Access-Control-Allow-Origin", "https://codebrewery-api-gateway.onrender.com")
-	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+func enableCors(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Access-Control-Allow-Origin", "http://codebrewery.vercel.app") // Allow your Vercel frontend
+    w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+    w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 }
+
 
 func executeHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("Received %s request for %s\n", r.Method, r.URL.Path)
-	enableCors(w)
+	enableCors(w, r)
 
 	if r.Method == http.MethodOptions {
 

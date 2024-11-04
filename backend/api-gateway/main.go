@@ -13,15 +13,15 @@ type CodeRequest struct {
 	Code     string `json:"code"`
 }
 
-func enableCors(w http.ResponseWriter) {
+func enableCors(w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Access-Control-Allow-Origin", "http://codebrewery.vercel.app") 
-    w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS") 
+    w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
     w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 }
 
 func executeCode(w http.ResponseWriter, r *http.Request) {
     fmt.Printf("Received %s request for %s\n", r.Method, r.URL.Path)
-    enableCors(w)
+    enableCors(w, r)
 
     if r.Method == http.MethodOptions {
         w.WriteHeader(http.StatusOK)
