@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: code-execution-service
+  labels:
+    app: code-execution-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: code-execution-service
+  template:
+    metadata:
+      labels:
+        app: code-execution-service
+    spec:
+      containers:
+        - name: code-execution-service
+          image: codebrewery-code-execution-service:latest  
+          ports:
+            - containerPort: 8081  
