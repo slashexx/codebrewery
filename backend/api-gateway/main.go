@@ -35,7 +35,7 @@ func executeCode(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    // Marshal the request to JSON
+
     reqBody, err := json.Marshal(req)
     if err != nil {
         log.Printf("Error marshaling request: %v", err)
@@ -43,7 +43,6 @@ func executeCode(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    // Forward the request to the Code Execution Service
     resp, err := http.Post("https://codebrewery-code-execution-service.onrender.com/execute", "application/json", bytes.NewBuffer(reqBody))
     if err != nil {
         log.Printf("Error contacting code execution service: %v", err)
