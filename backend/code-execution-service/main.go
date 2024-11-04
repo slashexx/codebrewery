@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	// "io"
 	"net/http"
 	"os"
 	"os/exec"
@@ -61,20 +60,20 @@ func executeCode(language string, code string) (string, error) {
 		}
 		cmd = exec.Command(tmpFile.Name()[:len(tmpFile.Name())-4])
 	case "java":
-		tmpFileName := filepath.Join(os.TempDir(), "Main.java") // Ensure consistent file name
+		tmpFileName := filepath.Join(os.TempDir(), "Main.java")
 		tmpFile, err = os.Create(tmpFileName)
 		if err != nil {
 			return "", err
 		}
-		defer os.Remove(tmpFileName) // Cleanup the file
+		defer os.Remove(tmpFileName) 
 	
-		// Write the Java code to the file
+		
 		if _, err := tmpFile.Write([]byte(code)); err != nil {
 			return "", err
 		}
-		tmpFile.Close() // Close the file to ensure it is written before compiling
+		tmpFile.Close() 
 	
-		// Compile the Java file
+		
 		fmt.Printf("Compiling with command: %s %s\n", "javac", tmpFileName)
 		execCmd := exec.Command("javac", tmpFileName)
 		cmdOutput, err := execCmd.CombinedOutput()
@@ -82,10 +81,9 @@ func executeCode(language string, code string) (string, error) {
 			return string(cmdOutput), err
 		}
 	
-		// Execute the Java program
 		className := "Main"
 		cmd = exec.Command("java", className)
-		cmd.Dir = filepath.Dir(tmpFileName) // Set the working directory
+		cmd.Dir = filepath.Dir(tmpFileName) 
 		cmdOutput, err = cmd.CombinedOutput()
 		if err != nil {
 			return string(cmdOutput), err
@@ -100,8 +98,8 @@ func executeCode(language string, code string) (string, error) {
 	return string(cmdOutput), err
 }
 
-func enableCors(w http.ResponseWriter, r *http.Request) {
-    w.Header().Set("Access-Control-Allow-Origin", "https://codebrewery.vercel.app") // Allow your Vercel frontend
+func enableCors(w http.ResponseWriter) {
+    w.Header().Set("Access-Control-Allow-Origin", "https://codebrewery.vercel.app") 
     w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
     w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 }
@@ -109,7 +107,7 @@ func enableCors(w http.ResponseWriter, r *http.Request) {
 
 func executeHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("Received %s request for %s\n", r.Method, r.URL.Path)
-	enableCors(w, r)
+	enableCors(w)
 
 	if r.Method == http.MethodOptions {
 
@@ -135,6 +133,6 @@ func executeHandler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	http.HandleFunc("/execute", executeHandler)
-	fmt.Println("Code Execution Service running on port 8081\n")
+	fmt.Println("Code Execution Service running on port 8081")
 	http.ListenAndServe(":8081", nil)
 }
