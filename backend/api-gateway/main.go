@@ -1,6 +1,5 @@
 // First ever comment from KDE let's go ?
 package main 
-
 import (
 	"bytes"
 	"encoding/json"
@@ -73,6 +72,6 @@ func executeCode(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	http.HandleFunc("/execute", executeCode)
-	fmt.Println("API Gateway running on port 8080\n")
+	fmt.Println("API Gateway running on port 8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }

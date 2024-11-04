@@ -11,6 +11,9 @@ RUN apk add --no-cache \
     openjdk11 \
     bash
 
+# Check if javac is installed
+RUN javac -version || echo "javac not found"
+
 WORKDIR /app
 
 # Copy go.mod and main.go to download dependencies

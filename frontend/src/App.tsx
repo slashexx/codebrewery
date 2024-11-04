@@ -11,9 +11,10 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-type Language = "cpp" | "python" | "java" | "go";
+type Language = "c" | "cpp" | "python" | "java" | "go";
 
 const INITIAL_CODE: Record<Language, string> = {
+  c: '#include <stdio.h> \n\nint main() {\n    printf("Hello world !"); \n    return 0; \n}',
   cpp: '#include <iostream>\n\nint main() {\n    std::cout << "Hello, World!" << std::endl;\n    return 0;\n}',
   python: 'print("Hello, World!")',
   java: 'public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n    }\n}',
@@ -21,6 +22,7 @@ const INITIAL_CODE: Record<Language, string> = {
 };
 
 const LANGUAGE_CONFIGS = {
+  c: { label: 'C', icon:Cpu, color:  "text-blue-500"},
   cpp: { label: "C++", icon: Cpu, color: "text-blue-500" },
   python: { label: "Python", icon: Code2, color: "text-yellow-500" },
   java: { label: "Java", icon: Terminal, color: "text-red-500" },
@@ -31,8 +33,7 @@ function App() {
   const [selectedLanguage, setSelectedLanguage] = useState<Language>("go");
   const [code, setCode] = useState(INITIAL_CODE[selectedLanguage]);
   const [output, setOutput] = useState("Output will appear here...");
-  const [editorInstance, setEditorInstance] =
-    useState<monaco.editor.IStandaloneCodeEditor>(null);
+  const [editorInstance, setEditorInstance] = useState<monaco.editor.IStandaloneCodeEditor>(null);
   const navigate = useNavigate();
 
   const handleLanguageChange = (language: Language) => {

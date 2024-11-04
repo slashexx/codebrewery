@@ -7,11 +7,12 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"path/filepath"
 )
 
 type Request struct {
 	Language string `json:"language"`
-	Code string `json:"code"`
+	Code     string `json:"code"`
 }
 
 type Response struct {
@@ -24,7 +25,6 @@ func executeCode(language string, code string) (string, error) {
 	var tmpFile *os.File
 	var err error
 
-	// Create a temporary file
 	tmpFile, err = os.CreateTemp("", "*."+language)
 	if err != nil {
 		return "", err
@@ -35,44 +35,58 @@ func executeCode(language string, code string) (string, error) {
 		}
 	}()
 
-	// Write the code to the temporary file
 	if _, err := tmpFile.Write([]byte(code)); err != nil {
 		return "", err
 	}
 	tmpFile.Close()
 
-	
 	switch language {
 	case "go":
+		fmt.Println("Go file name is  :"+tmpFile.Name())
 		cmd = exec.Command("go", "run", tmpFile.Name())
 	case "python":
 		cmd = exec.Command("python3", tmpFile.Name())
 	case "c":
-		execCmd := exec.Command("gcc", tmpFile.Name(), "-o", tmpFile.Name()[:len(tmpFile.Name())-2]) 
+		execCmd := exec.Command("gcc", tmpFile.Name(), "-o", tmpFile.Name()[:len(tmpFile.Name())-2])
 		if err := execCmd.Run(); err != nil {
-			cmdOutput, _ := execCmd.CombinedOutput() 
-			return string(cmdOutput), err
-		}
-		cmd = exec.Command(tmpFile.Name()[:len(tmpFile.Name())-2]) 
-	case "cpp":
-		execCmd := exec.Command("g++", tmpFile.Name(), "-o", tmpFile.Name()[:len(tmpFile.Name())-4]) 
-		if err := execCmd.Run(); err != nil {
-			cmdOutput, _ := execCmd.CombinedOutput() 
-			return string(cmdOutput), err
-		}
-		cmd = exec.Command(tmpFile.Name()[:len(tmpFile.Name())-4]) // Execute the compiled binary
-	case "java":
-		execCmd := exec.Command("javac", tmpFile.Name())
-		if err := execCmd.Run(); err != nil {
-			
 			cmdOutput, _ := execCmd.CombinedOutput()
 			return string(cmdOutput), err
 		}
-		className := tmpFile.Name()[:len(tmpFile.Name())-5] 
+		cmd = exec.Command(tmpFile.Name()[:len(tmpFile.Name())-2])
+	case "cpp":
+		execCmd := exec.Command("g++", tmpFile.Name(), "-o", tmpFile.Name()[:len(tmpFile.Name())-4])
+		if err := execCmd.Run(); err != nil {
+			cmdOutput, _ := execCmd.CombinedOutput()
+			return string(cmdOutput), err
+		}
+		cmd = exec.Command(tmpFile.Name()[:len(tmpFile.Name())-4])
+	case "java":
+		tmpFileName := filepath.Join(os.TempDir(), "Main.java") // Ensure consistent file name
+		tmpFile, err = os.Create(tmpFileName)
+		if err != nil {
+			return "", err
+		}
+		defer os.Remove(tmpFileName) // Cleanup the file
+	
+		// Write the Java code to the file
+		if _, err := tmpFile.Write([]byte(code)); err != nil {
+			return "", err
+		}
+		tmpFile.Close() // Close the file to ensure it is written before compiling
+	
+		// Compile the Java file
+		fmt.Printf("Compiling with command: %s %s\n", "javac", tmpFileName)
+		execCmd := exec.Command("javac", tmpFileName)
+		cmdOutput, err := execCmd.CombinedOutput()
+		if err != nil {
+			return string(cmdOutput), err
+		}
+	
+		// Execute the Java program
+		className := "Main"
 		cmd = exec.Command("java", className)
-		
-		
-		cmdOutput, err := cmd.CombinedOutput()
+		cmd.Dir = filepath.Dir(tmpFileName) // Set the working directory
+		cmdOutput, err = cmd.CombinedOutput()
 		if err != nil {
 			return string(cmdOutput), err
 		}
@@ -82,44 +96,41 @@ func executeCode(language string, code string) (string, error) {
 		return "", fmt.Errorf("unsupported language: %s", language)
 	}
 
-	// Execute the command and capture output
 	cmdOutput, err := cmd.CombinedOutput()
 	return string(cmdOutput), err
 }
 
-
 func enableCors(w http.ResponseWriter) {
-    w.Header().Set("Access-Control-Allow-Origin", "http://localhost:8080") 
-    w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS") 
-    w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:8080")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 }
 
 func executeHandler(w http.ResponseWriter, r *http.Request) {
-    fmt.Printf("Received %s request for %s\n", r.Method, r.URL.Path)
-    enableCors(w) 
+	fmt.Printf("Received %s request for %s\n", r.Method, r.URL.Path)
+	enableCors(w)
 
-    if r.Method == http.MethodOptions {
-		
-        w.WriteHeader(http.StatusOK)
-        return
-    }
+	if r.Method == http.MethodOptions {
 
-    var req Request
-    if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-        http.Error(w, err.Error(), http.StatusBadRequest)
-        return
-    }
+		w.WriteHeader(http.StatusOK)
+		return
+	}
 
-    output, err := executeCode(req.Language, req.Code)
-    res := Response{Output: output}
-    if err != nil {
-        res.Error = err.Error()
-    }
+	var req Request
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
 
-    w.Header().Set("Content-Type", "application/json")
-    json.NewEncoder(w).Encode(res)
+	output, err := executeCode(req.Language, req.Code)
+	res := Response{Output: output}
+	if err != nil {
+		res.Error = err.Error()
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(res)
 }
-
 
 func main() {
 	http.HandleFunc("/execute", executeHandler)
