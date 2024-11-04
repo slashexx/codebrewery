@@ -28,7 +28,7 @@ CodeBrewery is an innovative web application that enables users to write, run, a
 ## Technologies
 
 <p align="left">
-    <img src="https://skillicons.dev/icons?i=go,react,ts,docker,kubernetes,github,githubactions,vite" />
+    <img src="https://skillicons.dev/icons?i=go,ts,docker,kubernetes,react,githubactions,github,vite" />
 </p>
 
 ## Architecture
