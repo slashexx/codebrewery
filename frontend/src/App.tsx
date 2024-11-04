@@ -8,6 +8,7 @@ import {
   Wand2,
   RotateCcw,
   Wine,
+  Cup
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -25,7 +26,7 @@ const LANGUAGE_CONFIGS = {
   c: { label: 'C', icon:Cpu, color:  "text-blue-500"},
   cpp: { label: "C++", icon: Cpu, color: "text-blue-500" },
   python: { label: "Python", icon: Code2, color: "text-yellow-500" },
-  java: { label: "Java", icon: Terminal, color: "text-red-500" },
+  java: { label: "Java", icon: Cup, color: "text-red-500" },
   go: { label: "Go", icon: Code2, color: "text-cyan-500" },
 };
 
