@@ -44,7 +44,7 @@ func executeCode(w http.ResponseWriter, r *http.Request) {
     }
 
     // Forward the request to the Code Execution Service
-    resp, err := http.Post("http://code-execution-service:8081/execute", "application/json", bytes.NewBuffer(reqBody))
+    resp, err := http.Post("https://codebrewery-code-execution-service.onrender.com/execute", "application/json", bytes.NewBuffer(reqBody))
     if err != nil {
         log.Printf("Error contacting code execution service: %v", err)
         http.Error(w, "Failed to execute code", http.StatusInternalServerError)
