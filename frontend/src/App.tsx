@@ -45,7 +45,7 @@ function App() {
     setOutput(`Running ${LANGUAGE_CONFIGS[selectedLanguage].label} code...\n`);
 
     try {
-      const response = await fetch("http://localhost:8080/execute", {
+      const response = await fetch("https://codebrewery-api-gateway.onrender.com/execute", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
