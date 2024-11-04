@@ -23,12 +23,13 @@ const INITIAL_CODE: Record<Language, string> = {
   java: 'public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n    }\n}',
   go: 'package main\n\nimport "fmt"\n\nfunc main() {\n    fmt.Println("Hello, World!")\n}',
 };
+
 const LANGUAGE_CONFIGS = {
-  c: { label: "C", icon: "devicon-c-plain", color: "text-blue-500" },
-  cpp: { label: "C++", icon: "devicon-cplusplus-plain", color: "text-blue-500" },
-  python: { label: "Python", icon: "devicon-python-plain", color: "text-yellow-500" },
-  java: { label: "Java", icon: "devicon-java-plain", color: "text-red-500" },
-  go: { label: "Go", icon: "devicon-go-plain", color: "text-cyan-500" },
+  c: { label: 'C', icon: Cpu, color: "text-blue-500" },
+  cpp: { label: "C++", icon: Cpu, color: "text-blue-500" },
+  python: { label: "Python", icon: Code2, color: "text-yellow-500" },
+  java: { label: "Java", icon: Coffee, color: "text-red-500" },
+  go: { label: "Go", icon: Code2, color: "text-cyan-500" },
 };
 
 function App() {
@@ -111,26 +112,21 @@ function App() {
 
       <div className="flex h-[calc(100vh-4rem)]">
         {/* Language Selection Sidebar */}
-<div className="w-20 bg-gray-800 border-r border-gray-700 p-2 flex flex-col gap-2">
-  {(Object.keys(LANGUAGE_CONFIGS) as Language[]).map((lang) => {
-    const { label, icon, color } = LANGUAGE_CONFIGS[lang];
-    return (
-      <button
-        key={lang}
-        onClick={() => handleLanguageChange(lang)}
-        className={`p-3 rounded-lg transition-all ${
-          selectedLanguage === lang
-            ? "bg-gray-700 shadow-lg scale-105"
-            : "hover:bg-gray-700/50"
-        } flex flex-col items-center gap-1`}
-      >
-        <i className={`${icon} ${color} text-2xl`} />
-        <span className="text-xs">{label}</span>
-      </button>
-    );
-  })}
-</div>
-
+        <div className="w-20 bg-gray-800 border-r border-gray-700 p-2 flex flex-col gap-2">
+          {(Object.keys(LANGUAGE_CONFIGS) as Language[]).map((lang) => {
+            const { label, icon: Icon, color } = LANGUAGE_CONFIGS[lang];
+            return (
+              <button
+                key={lang}
+                onClick={() => handleLanguageChange(lang)}
+                className={`p-3 rounded-lg transition-all ${selectedLanguage === lang ? "bg-gray-700 shadow-lg scale-105" : "hover:bg-gray-700/50"
+                  } flex flex-col items-center gap-1`}
+              >
+                <Icon className={`w-6 h-6 ${color}`} />
+                <span className="text-xs">{label}</span>
+              </button>
+            );
+          })}
         </div>
 
         {/* Main Content */}
@@ -201,7 +197,7 @@ function App() {
           </div>
         </div>
       </div>
-    // </div>
+    </div>
   );
 }
 
