@@ -167,7 +167,7 @@ function App() {
                   suggestOnTriggerCharacters: true,
                   quickSuggestions: true,
                   snippetSuggestions: "inline",
-                  wordBasedSuggestions: "matchingDocuments",
+                  wordBasedSuggestions:"allDocuments",
                   parameterHints: {
                     enabled: true,
                     cycle: true,
