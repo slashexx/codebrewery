@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 import "devicon/devicon.min.css";
 
 
-type Language = "c" | "cpp" | "python" | "java" | "go";
+type Language = "c" | "cpp" | "python" | "java" | "go" | "rs";
 
 const INITIAL_CODE: Record<Language, string> = {
   c: '#include <stdio.h> \n\nint main() {\n    printf("Hello world !"); \n    return 0; \n}',
@@ -22,6 +22,7 @@ const INITIAL_CODE: Record<Language, string> = {
   python: 'print("Hello, World!")',
   java: 'public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n    }\n}',
   go: 'package main\n\nimport "fmt"\n\nfunc main() {\n    fmt.Println("Hello, World!")\n}',
+  rust: 'fn main() {\n\tprintln!("Hello world !")\n}'
 };
 
 const LANGUAGE_CONFIGS = {
@@ -30,10 +31,11 @@ const LANGUAGE_CONFIGS = {
   python: { label: "Python", icon: "devicon-python-plain colored" , color: "text-yellow-500" },
   java: { label: "Java", icon: "devicon-java-plain colored", color: "text-red-500" },
   go: { label: "Go", icon: "devicon-go-plain colored", color: "text-cyan-500" },
+  rust: { label: "Rust", icon: "devicon-rust-original colored", color: "text-red-500"}
 };
 
 function App() {
-  const [selectedLanguage, setSelectedLanguage] = useState<Language>("go");
+  const [selectedLanguage, setSelectedLanguage] = useState<Language>("c");
   const [code, setCode] = useState(INITIAL_CODE[selectedLanguage]);
   const [output, setOutput] = useState("Output will appear here...");
   const [editorInstance, setEditorInstance] = useState<monaco.editor.IStandaloneCodeEditor>(null);

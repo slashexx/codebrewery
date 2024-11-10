@@ -59,6 +59,13 @@ func executeCode(language string, code string) (string, error) {
 			return string(cmdOutput), err
 		}
 		cmd = exec.Command(tmpFile.Name()[:len(tmpFile.Name())-4])
+	case "rs":
+		execCmd := exec.Command("rustc", tmpFile.Name())
+		if err := execCmd.Run(); err != nil {
+			cmdOutput,_ := execCmd.CombinedOutput()
+			
+			return string(cmdOutput), err
+		}
 	case "java":
 		tmpFileName := filepath.Join(os.TempDir(), "Main.java")
 		tmpFile, err = os.Create(tmpFileName)
