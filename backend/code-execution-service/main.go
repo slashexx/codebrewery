@@ -41,7 +41,7 @@ func executeCode(language string, code string) (string, error) {
 
 	switch language {
 	case "go":
-		fmt.Println("Go file name is  :"+tmpFile.Name())
+		fmt.Println("Go file name is  :" + tmpFile.Name())
 		cmd = exec.Command("go", "run", tmpFile.Name())
 	case "python":
 		cmd = exec.Command("python3", tmpFile.Name())
@@ -62,41 +62,47 @@ func executeCode(language string, code string) (string, error) {
 	case "rs":
 		execCmd := exec.Command("rustc", tmpFile.Name())
 		if err := execCmd.Run(); err != nil {
-			cmdOutput,_ := execCmd.CombinedOutput()
-			
+			cmdOutput, _ := execCmd.CombinedOutput()
 			return string(cmdOutput), err
 		}
+
+		binaryName := tmpFile.Name()[:len(tmpFile.Name())-len(".rs")]
+		cmd = exec.Command(binaryName)
+		cmdOutput, err := cmd.CombinedOutput()
+		if err != nil {
+			return string(cmdOutput), err
+		}
+		return string(cmdOutput), nil
+
 	case "java":
 		tmpFileName := filepath.Join(os.TempDir(), "Main.java")
 		tmpFile, err = os.Create(tmpFileName)
 		if err != nil {
 			return "", err
 		}
-		defer os.Remove(tmpFileName) 
-	
-		
+		defer os.Remove(tmpFileName)
+
 		if _, err := tmpFile.Write([]byte(code)); err != nil {
 			return "", err
 		}
-		tmpFile.Close() 
-	
-		
+		tmpFile.Close()
+
 		fmt.Printf("Compiling with command: %s %s\n", "javac", tmpFileName)
 		execCmd := exec.Command("javac", tmpFileName)
 		cmdOutput, err := execCmd.CombinedOutput()
 		if err != nil {
 			return string(cmdOutput), err
 		}
-	
+
 		className := "Main"
 		cmd = exec.Command("java", className)
-		cmd.Dir = filepath.Dir(tmpFileName) 
+		cmd.Dir = filepath.Dir(tmpFileName)
 		cmdOutput, err = cmd.CombinedOutput()
 		if err != nil {
 			return string(cmdOutput), err
 		}
 		return string(cmdOutput), nil
-	
+
 	default:
 		return "", fmt.Errorf("unsupported language: %s", language)
 	}
@@ -106,11 +112,10 @@ func executeCode(language string, code string) (string, error) {
 }
 
 func enableCors(w http.ResponseWriter) {
-    w.Header().Set("Access-Control-Allow-Origin", "https://codebrewery.vercel.app") 
-    w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
-    w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	w.Header().Set("Access-Control-Allow-Origin", "https://codebrewery.vercel.app")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 }
-
 
 func executeHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("Received %s request for %s\n", r.Method, r.URL.Path)
