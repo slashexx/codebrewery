@@ -12,16 +12,16 @@ type CodeRequest struct {
 	Language string `json:"language"`
 	Code     string `json:"code"`
 }
-
 func enableCors(w http.ResponseWriter) {
     w.Header().Set("Access-Control-Allow-Origin", "https://codebrewery.vercel.app") 
     w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
-    w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+    w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+    w.Header().Set("Access-Control-Allow-Credentials", "true") // If required
 }
 
 func executeCode(w http.ResponseWriter, r *http.Request) {
-    fmt.Printf("Received %s request for %s\n", r.Method, r.URL.Path)
     enableCors(w)
+    fmt.Printf("Received %s request for %s\n", r.Method, r.URL.Path)
 
     if r.Method == http.MethodOptions {
         w.WriteHeader(http.StatusOK)
