@@ -45,7 +45,7 @@ func executeCode(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    url := "https://codebrewery-code-execution-service.onrender.com"
+    url := "https://codebrewery-code-execution-service.onrender.com/execute"
     log.Printf("Sending request to Code Execution Service: %s", url)
 
     resp, err := http.Post(url, "application/json", bytes.NewBuffer(reqBody))
