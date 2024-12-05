@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+    "io/ioutil"
 )
 
 type CodeRequest struct {
@@ -35,6 +36,7 @@ func executeCode(w http.ResponseWriter, r *http.Request) {
         return
     }
 
+    log.Printf("Request body: %+v", req)
 
     reqBody, err := json.Marshal(req)
     if err != nil {
@@ -42,8 +44,11 @@ func executeCode(w http.ResponseWriter, r *http.Request) {
         http.Error(w, "Failed to marshal request", http.StatusInternalServerError)
         return
     }
-// https://codebrewery-code-execution-service.onrender.com
-    resp, err := http.Post("https://codebrewery-code-execution-service.onrender.com", "application/json", bytes.NewBuffer(reqBody))
+
+    url := "https://codebrewery-code-execution-service.onrender.com"
+    log.Printf("Sending request to Code Execution Service: %s", url)
+
+    resp, err := http.Post(url, "application/json", bytes.NewBuffer(reqBody))
     if err != nil {
         log.Printf("Error contacting code execution service: %v", err)
         http.Error(w, "Failed to execute code", http.StatusInternalServerError)
@@ -51,8 +56,12 @@ func executeCode(w http.ResponseWriter, r *http.Request) {
     }
     defer resp.Body.Close()
 
+    log.Printf("Received response status: %d", resp.StatusCode)
+
     if resp.StatusCode != http.StatusOK {
         log.Printf("Code execution service returned status: %d", resp.StatusCode)
+        responseBody, _ := ioutil.ReadAll(resp.Body)
+        log.Printf("Response body: %s", string(responseBody))
         http.Error(w, "Code execution service returned an error", http.StatusInternalServerError)
         return
     }
