@@ -66,7 +66,15 @@ func executeCode(language string, code string) (string, error) {
 			return string(cmdOutput), err
 		}
 
+		// Set the binary as executable
 		binaryName := tmpFile.Name()[:len(tmpFile.Name())-len(".rs")]
+		execCmd = exec.Command("chmod", "+x", binaryName)
+		if err := execCmd.Run(); err != nil {
+			cmdOutput, _ := execCmd.CombinedOutput()
+			return string(cmdOutput), err
+		}
+
+		// Execute the binary
 		cmd = exec.Command(binaryName)
 		cmdOutput, err := cmd.CombinedOutput()
 		if err != nil {
@@ -112,7 +120,7 @@ func executeCode(language string, code string) (string, error) {
 }
 
 func enableCors(w http.ResponseWriter) {
-	w.Header().Set("Access-Control-Allow-Origin", "https://codebrewery.vercel.app")
+	w.Header().Set("Access-Control-Allow-Origin", "https://codebrewery-api-gateway.onrender.com/execute")
 	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 }
