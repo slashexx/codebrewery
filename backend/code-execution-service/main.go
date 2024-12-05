@@ -120,7 +120,7 @@ func executeCode(language string, code string) (string, error) {
 }
 // https://codebrewery-api-gateway.onrender.com
 func enableCors(w http.ResponseWriter) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Origin", "https://codebrewery-api-gateway.onrender.com")
 	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 }
