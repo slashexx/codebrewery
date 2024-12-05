@@ -42,8 +42,8 @@ func executeCode(w http.ResponseWriter, r *http.Request) {
         http.Error(w, "Failed to marshal request", http.StatusInternalServerError)
         return
     }
-
-    resp, err := http.Post("https://codebrewery-code-execution-service.onrender.com/execute", "application/json", bytes.NewBuffer(reqBody))
+// https://codebrewery-code-execution-service.onrender.com
+    resp, err := http.Post("https://codebrewery-code-execution-service.onrender.com", "application/json", bytes.NewBuffer(reqBody))
     if err != nil {
         log.Printf("Error contacting code execution service: %v", err)
         http.Error(w, "Failed to execute code", http.StatusInternalServerError)

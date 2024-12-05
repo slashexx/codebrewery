@@ -66,7 +66,15 @@ func executeCode(language string, code string) (string, error) {
 			return string(cmdOutput), err
 		}
 
+		// Set the binary as executable
 		binaryName := tmpFile.Name()[:len(tmpFile.Name())-len(".rs")]
+		execCmd = exec.Command("chmod", "+x", binaryName)
+		if err := execCmd.Run(); err != nil {
+			cmdOutput, _ := execCmd.CombinedOutput()
+			return string(cmdOutput), err
+		}
+
+		// Execute the binary
 		cmd = exec.Command(binaryName)
 		cmdOutput, err := cmd.CombinedOutput()
 		if err != nil {
