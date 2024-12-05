@@ -50,6 +50,8 @@ function App() {
     setOutput(`Running ${LANGUAGE_CONFIGS[selectedLanguage].label} code...\n`);
 
     try {
+      console.log("Sending request for running code :", code );
+      console.log("Executing code:", code);
       const response = await fetch("https://codebrewery-api-gateway.onrender.com/execute", {
         method: "POST",
         headers: {
@@ -57,6 +59,7 @@ function App() {
         },
         body: JSON.stringify({ language: selectedLanguage, code }),
       });
+      console.log("Response:", response);
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
