@@ -192,9 +192,14 @@ go test ./...
 
 This project uses GitHub Actions for Continuous Integration (CI). Every push and pull request to the `main` branch triggers automated tests to maintain code quality.
 
+## Contributing
+
+Check out [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to contribute!
+
+
 ## License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+Distributed under the MIT License. See [LICENSE](license) for more information.
 
 ## Acknowledgments
 
