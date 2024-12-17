@@ -199,7 +199,7 @@ Check out [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to contribute!
 
 ## License
 
-Distributed under the MIT License. See [LICENSE](license) for more information.
+Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
 
 ## Acknowledgments
 
