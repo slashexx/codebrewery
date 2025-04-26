@@ -14,11 +14,17 @@ jobs:
     steps:
       - name: Ping API Gateway
         run: |
-          curl -X GET https://codebrewery-api-gateway.onrender.com/ || echo "API Gateway ping sent"
+          curl -X POST https://codebrewery-api-gateway.onrender.com/execute \
+          -H "Content-Type: application/json" \
+          -d '{"language":"python","code":"print(\"Keeping service alive\")"}' \
+          || echo "API Gateway ping sent"
       
       - name: Ping Code Execution Service
         run: |
-          curl -X GET https://codebrewery-code-execution-service.onrender.com/ || echo "Code Execution Service ping sent"
+          curl -X POST https://codebrewery-code-execution-service.onrender.com/execute \
+          -H "Content-Type: application/json" \
+          -d '{"language":"python","code":"print(\"Keeping service alive\")"}' \
+          || echo "Code Execution Service ping sent"
           
       - name: Timestamp
         run: echo "Services pinged at $(date)"
