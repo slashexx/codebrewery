@@ -2,7 +2,8 @@ name: Keep Render Services Alive
 
 on:
   schedule:
-    - cron: '*/2 * * * *'
+    - cron: '*/5 * * * *' 
+  workflow_dispatch: 
   push:
     branches:
       - main
@@ -13,18 +14,32 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Ping API Gateway
+        id: ping-api
         run: |
-          curl -X POST https://codebrewery-api-gateway.onrender.com/execute \
+          echo "Sending ping to API Gateway..."
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST https://codebrewery-api-gateway.onrender.com/execute \
           -H "Content-Type: application/json" \
-          -d '{"language":"python","code":"print(\"Keeping service alive\")"}' \
-          -v || echo "API Gateway ping sent"
+          -d '{"language":"python","code":"print(\"Keeping service alive\")"}')
+          echo "Received status code: $HTTP_STATUS"
+          if [[ "$HTTP_STATUS" -ge 200 && "$HTTP_STATUS" -lt 300 ]]; then
+            echo "API Gateway ping successful!"
+          else
+            echo "::warning::API Gateway ping returned status code $HTTP_STATUS"
+          fi
       
       - name: Ping Code Execution Service
+        id: ping-execution
         run: |
-          curl -X POST https://codebrewery-code-execution-service.onrender.com/execute \
+          echo "Sending ping to Code Execution Service..."
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST https://codebrewery-code-execution-service.onrender.com/execute \
           -H "Content-Type: application/json" \
-          -d '{"language":"python","code":"print(\"Keeping service alive\")"}' \
-          -v || echo "Code Execution Service ping sent"
+          -d '{"language":"python","code":"print(\"Keeping service alive\")"}')
+          echo "Received status code: $HTTP_STATUS"
+          if [[ "$HTTP_STATUS" -ge 200 && "$HTTP_STATUS" -lt 300 ]]; then
+            echo "Code Execution Service ping successful!"
+          else
+            echo "::warning::Code Execution Service ping returned status code $HTTP_STATUS"
+          fi
           
       - name: Timestamp
         run: echo "Services pinged at $(date)"
