@@ -2,8 +2,12 @@ name: Keep Render Services Alive
 
 on:
   schedule:
-    - cron: '*/1 * * * *'
-  
+    - cron: '*/2 * * * *'
+  push:
+    branches:
+      - main
+      - master
+
 jobs:
   ping-services:
     runs-on: ubuntu-latest
@@ -13,14 +17,14 @@ jobs:
           curl -X POST https://codebrewery-api-gateway.onrender.com/execute \
           -H "Content-Type: application/json" \
           -d '{"language":"python","code":"print(\"Keeping service alive\")"}' \
-          || echo "API Gateway ping sent"
+          -v || echo "API Gateway ping sent"
       
       - name: Ping Code Execution Service
         run: |
           curl -X POST https://codebrewery-code-execution-service.onrender.com/execute \
           -H "Content-Type: application/json" \
           -d '{"language":"python","code":"print(\"Keeping service alive\")"}' \
-          || echo "Code Execution Service ping sent"
+          -v || echo "Code Execution Service ping sent"
           
       - name: Timestamp
         run: echo "Services pinged at $(date)"
