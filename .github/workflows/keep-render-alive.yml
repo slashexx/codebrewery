@@ -2,12 +2,8 @@ name: Keep Render Services Alive
 
 on:
   schedule:
-    # Run every minute
     - cron: '*/1 * * * *'
   
-  # Also allow manual triggering
-  workflow_dispatch:
-
 jobs:
   ping-services:
     runs-on: ubuntu-latest
