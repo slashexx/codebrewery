@@ -14,10 +14,11 @@ type CodeRequest struct {
 	Code     string `json:"code"`
 }
 func enableCors(w http.ResponseWriter) {
-    w.Header().Set("Access-Control-Allow-Origin", "https://codebrewery.vercel.app") 
-    w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+    // Allow requests from all origins temporarily for demonstration
+    w.Header().Set("Access-Control-Allow-Origin", "*") 
+    w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
     w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
-    w.Header().Set("Access-Control-Allow-Credentials", "true") // If required
+    w.Header().Set("Access-Control-Allow-Credentials", "false") // Changed to false since we're using "*" for origin
 }
 
 func executeCode(w http.ResponseWriter, r *http.Request) {

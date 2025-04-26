@@ -118,11 +118,13 @@ func executeCode(language string, code string) (string, error) {
 	cmdOutput, err := cmd.CombinedOutput()
 	return string(cmdOutput), err
 }
+
 // https://codebrewery-api-gateway.onrender.com
 func enableCors(w http.ResponseWriter) {
-	w.Header().Set("Access-Control-Allow-Origin", "https://codebrewery-api-gateway.onrender.com")
-	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	// Allow requests from all origins temporarily for demonstration
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
 }
 
 func executeHandler(w http.ResponseWriter, r *http.Request) {
